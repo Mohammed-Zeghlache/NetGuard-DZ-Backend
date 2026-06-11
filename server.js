@@ -14,7 +14,7 @@ const ticketRoutes = require('./routes/tickets');
 const chatRoutes = require('./api/chat/route');
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT ;
 
 // Middleware
 app.use(cors());
