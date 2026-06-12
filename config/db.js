@@ -51,19 +51,25 @@ require('dotenv').config();
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
- ssl: process.env.DATABASE_URL.includes('render.com')
-  ? { rejectUnauthorized: false }
-  : false
+  ssl: {
+    rejectUnauthorized: false
+  },
+  max: 10,
+  idleTimeoutMillis: 30000,
+  connectionTimeoutMillis: 10000,
 });
 
-// Use pool.query instead of pool.connect to avoid thread termination drops
+pool.on('error', (err) => {
+  console.error('⚠️ Unexpected pool error:', err.message);
+});
+
 function testConnection() {
   pool.query('SELECT NOW()', (err, res) => {
     if (err) {
       console.error('⚠️ Database connection issue... Retrying in 3 seconds. Error:', err.message);
       setTimeout(testConnection, 3000);
     } else {
-      console.log('✅ Connected to PostgreSQL database successfully!');
+      console.log('✅ Connected to PostgreSQL database successfully! Time:', res.rows[0].now);
     }
   });
 }
