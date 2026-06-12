@@ -1,16 +1,31 @@
 const { Pool } = require('pg');
 require('dotenv').config();
 
+// const pool = new Pool({
+//   host: process.env.DB_HOST ,
+//   port: process.env.DB_PORT ,
+//   user: process.env.DB_USER ,
+//   password: process.env.DB_PASSWORD ,
+//   database: process.env.DB_NAME  ,
+//   max: 20,
+//   idleTimeoutMillis: 30000,
+//   connectionTimeoutMillis: 2000,
+// });
+
 const pool = new Pool({
-  host: process.env.DB_HOST || 'localhost',
-  port: process.env.DB_PORT || 10000,
-  user: process.env.DB_USER || 'postgres',
-  password: process.env.DB_PASSWORD || 'meeedzsql',
-  database: process.env.DB_NAME || 'Algerie_Telecom',
+  host: process.env.DB_HOST ,
+  port: process.env.DB_PORT ,
+  user: process.env.DB_USER ',
+  password: process.env.DB_PASSWORD ,
+  database: process.env.DB_NAME ,
   max: 20,
   idleTimeoutMillis: 30000,
   connectionTimeoutMillis: 2000,
+  ssl: {
+    rejectUnauthorized: false
+  }
 });
+
 
 // Test connection
 pool.connect((err, client, release) => {
