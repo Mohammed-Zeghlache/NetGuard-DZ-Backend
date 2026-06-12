@@ -46,7 +46,6 @@
 // module.exports = pool;
 
 
-
 const { Pool } = require('pg');
 require('dotenv').config();
 
@@ -59,8 +58,11 @@ const pool = new Pool({
   max: 20,
   idleTimeoutMillis: 30000,
   connectionTimeoutMillis: 5000,
-  // Fix: Turn OFF SSL completely for Render's internal network connection
-  ssl: false 
+  // Enforce SSL connection rules for Render
+  ssl: {
+    require: true,
+    rejectUnauthorized: false
+  }
 });
 
 // Self-healing connection tester with retry logic
