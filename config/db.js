@@ -46,6 +46,7 @@
 // module.exports = pool;
 
 
+
 const { Pool } = require('pg');
 require('dotenv').config();
 
@@ -57,19 +58,17 @@ const pool = new Pool({
   database: process.env.DB_NAME,
   max: 20,
   idleTimeoutMillis: 30000,
-  connectionTimeoutMillis: 5000, // Increased timeout to give Render time to respond
-  ssl: {
-    require: true,
-    rejectUnauthorized: false
-  }
+  connectionTimeoutMillis: 5000,
+  // Fix: Turn OFF SSL completely for Render's internal network connection
+  ssl: false 
 });
 
 // Self-healing connection tester with retry logic
 function connectWithRetry() {
   pool.connect((err, client, release) => {
     if (err) {
-      console.error('⚠️ Database waking up... Retrying in 3 seconds. Error:', err.message);
-      setTimeout(connectWithRetry, 3000); // Wait 3 seconds and try again
+      console.error('⚠️ Database connection issue... Retrying in 3 seconds. Error:', err.message);
+      setTimeout(connectWithRetry, 3000);
     } else {
       console.log('✅ Connected to PostgreSQL database successfully!');
       release();
