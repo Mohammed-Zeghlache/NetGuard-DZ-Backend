@@ -15,6 +15,8 @@ require('dotenv').config();
 //   }
 // });
 
+const { Pool } = require('pg');
+
 const pool = new Pool({
   host: process.env.DB_HOST,
   port: process.env.DB_PORT,
@@ -24,11 +26,13 @@ const pool = new Pool({
   max: 20,
   idleTimeoutMillis: 30000,
   connectionTimeoutMillis: 2000,
-  ssl: {
-    require: true,
-    rejectUnauthorized: false
-  }
+  // Fix: Only use SSL if connecting via the external public URL
+  ssl: process.env.DB_HOST.includes('render.com') 
+    ? { rejectUnauthorized: false } 
+    : false
 });
+
+module.exports = pool;
 
 
 // Test connection
