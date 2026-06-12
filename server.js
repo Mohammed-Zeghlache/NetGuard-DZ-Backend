@@ -17,7 +17,9 @@ const app = express();
 const PORT = process.env.PORT ;
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: ['https://netguardz.netlify.app', 'http://localhost:3000']
+}));
 app.use(express.json());
 
 // ==================== ROUTES ====================
