@@ -26,11 +26,13 @@ const pool = new Pool({
   max: 20,
   idleTimeoutMillis: 30000,
   connectionTimeoutMillis: 2000,
-  // Fix: Only use SSL if connecting via the external public URL
-  ssl: process.env.DB_HOST.includes('render.com') 
+  // Automatically handles SSL for both internal and external connections
+  ssl: process.env.DB_HOST && process.env.DB_HOST.includes('render.com') 
     ? { rejectUnauthorized: false } 
     : false
 });
+
+module.exports = pool;
 
 module.exports = pool;
 
