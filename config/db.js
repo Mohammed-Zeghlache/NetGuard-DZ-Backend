@@ -34,8 +34,6 @@ const pool = new Pool({
 
 module.exports = pool;
 
-module.exports = pool;
-
 
 // Test connection
 pool.connect((err, client, release) => {
